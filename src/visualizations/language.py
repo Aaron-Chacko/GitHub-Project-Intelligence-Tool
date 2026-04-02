@@ -56,4 +56,4 @@ def show_languages(owner, repo, headers):
         sel.annotation.set_text(f"{languages[index]}: {percentages[index]:.2f}%")
 
     plt.tight_layout()
-    plt.show(block=True)
+    plt.savefig("static/languages.png")

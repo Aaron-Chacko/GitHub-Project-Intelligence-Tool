@@ -44,4 +44,4 @@ def show_contributors(owner, repo, headers):
     plt.title(f"Top Contributors: {owner}/{repo}", fontsize=14)
 
     plt.tight_layout()
-    plt.show(block=True)
+    plt.savefig("static/contributors.png")

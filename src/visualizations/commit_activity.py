@@ -59,4 +59,4 @@ def show_commit_activity(owner, repo, headers):
     plt.xticks(rotation=45)
     plt.tight_layout()
 
-    plt.show(block=True)
+    plt.savefig("static/commit.png")
