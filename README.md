@@ -16,3 +16,21 @@ The score is calculated by combining three key factors:
 - Total stars represent the stars received by the user which are multiplied by 3 to emphasize the quality and impact of the developer’s work.
 
 Higher scores indicate stronger and more influential GitHub profiles.
+
+```
+
+
+## Features
+
+- Commit Activity Visualization (time-based trends)
+- Contributor Distribution Analysis (top contributors)
+- Language Breakdown with interactive hover insights
+- Developer Scoring System (based on followers, repos, stars)
+
+## Tech Stack
+
+- Python
+- Matplotlib
+- Pandas
+- GitHub REST API
+- mplcursors
