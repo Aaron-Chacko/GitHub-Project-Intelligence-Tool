@@ -5,65 +5,58 @@ import requests
 import matplotlib.pyplot as plt
 from collections import Counter
 from datetime import datetime
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
 
-TOKEN = os.getenv("GITHUB_TOKEN")
+def show_commit_activity(owner, repo, headers):
 
-OWNER = "psf"
-REPO = "requests"
+    all_commits = []
+    page = 1
 
-headers = {
-    "Authorization": f"token {TOKEN}"
-}
+    while True:
+        print(f"Fetching page {page}...")
 
-all_commits = []
-page = 1
+        url = f"https://api.github.com/repos/{owner}/{repo}/commits?page={page}&per_page=100"
+        response = requests.get(url, headers=headers)
 
-while True:
-    print(f"Fetching page {page}...")
+        if response.status_code != 200:
+            print("Error:", response.json())
+            return
 
-    url = f"https://api.github.com/repos/{OWNER}/{REPO}/commits?page={page}&per_page=100"
-    response = requests.get(url, headers=headers)
+        data = response.json()
 
-    if response.status_code != 200:
-        print("Error:", response.json())
-        break
+        if not isinstance(data, list) or len(data) == 0:
+            break
 
-    data = response.json()
+        all_commits.extend(data)
 
-    if not isinstance(data, list) or len(data) == 0:
-        break
+        if len(data) < 100:
+            break
 
-    all_commits.extend(data)
+        page += 1
 
-    if len(data) < 100:
-        break
+    dates = []
+    for commit in all_commits:
+        date_str = commit["commit"]["author"]["date"]
+        date_obj = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")
+        dates.append(date_obj.date())
 
-    page += 1
+    if not dates:
+        print("No commit data found.")
+        return
 
-dates = []
-for commit in all_commits:
-    date_str = commit["commit"]["author"]["date"]
-    date_obj = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")
-    dates.append(date_obj.date())
+    date_counts = Counter(dates)
 
-date_counts = Counter(dates)
+    sorted_dates = sorted(date_counts.keys())
+    commit_counts = [date_counts[d] for d in sorted_dates]
 
-sorted_dates = sorted(date_counts.keys())
-commit_counts = [date_counts[d] for d in sorted_dates]
+    print("Total commits:", len(all_commits))
 
-print("Total commits:", len(all_commits))
+    plt.figure()
+    plt.plot(sorted_dates, commit_counts, marker='o')
+    plt.xlabel("Date")
+    plt.ylabel("Number of Commits")
+    plt.title(f"Commit Activity: {owner}/{repo}")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
-plt.figure()
-plt.plot(sorted_dates, commit_counts, marker='o')
-plt.xlabel("Date")
-plt.ylabel("Number of Commits")
-plt.title("Commit Activity Over Time (Full Data)")
-plt.xticks(rotation=45)
-plt.tight_layout()
-
-plt.show(block=True)
-input("Press Enter to exit...")
+    plt.show(block=True)

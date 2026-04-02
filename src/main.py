@@ -1,6 +1,27 @@
 import pandas as pd
 import requests
+from dotenv import load_dotenv
+import os
 
+from visualizations.commit_activity import show_commit_activity
+from visualizations.contributors import show_contributors
+from visualizations.language import show_languages
+
+load_dotenv()
+TOKEN = os.getenv("GITHUB_TOKEN")
+
+headers = {
+    "Authorization": f"token {TOKEN}"
+}
+
+owner = input("Enter GitHub username/org: ")
+repo = input("Enter repository name: ")
+
+print("\nFetching insights...\n")
+
+show_commit_activity(owner, repo, headers)
+show_contributors(owner, repo, headers)
+show_languages(owner, repo, headers)
 
 def extract_username(url):
     return url.rstrip("/").split("/")[-1]
@@ -62,13 +83,19 @@ def calculate_score(row):
 
 
 def main():
-    
+    owner = input("Enter GitHub username/org: ")
+    repo = input("Enter repository name: ")
+
+    print("\nFetching insights...\n")
+
+    show_commit_activity(owner, repo, headers)
+    show_contributors(owner, repo, headers)
+    show_languages(owner, repo, headers)
+
     df = pd.read_csv("data/input.csv")
 
-    #username
     df["username"] = df["github_url"].apply(extract_username)
 
-    #github data
     df["github_data"] = df["username"].apply(get_github_data)
 
     df["public_repos"] = df["github_data"].apply(lambda x: x["public_repos"])
@@ -77,7 +104,6 @@ def main():
 
     df.drop(columns=["github_data"], inplace=True)
 
-    #repo analyse
     df["repo_data"] = df["username"].apply(analyze_repos)
 
     df["total_stars"] = df["repo_data"].apply(lambda x: x["total_stars"])
@@ -87,7 +113,6 @@ def main():
     
     df["score"] = df.apply(calculate_score, axis=1)
 
-    #score highest
     df = df.sort_values(by="score", ascending=False)
 
     print("\nFinal Data:\n")
