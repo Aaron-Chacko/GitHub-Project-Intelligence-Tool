@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .env
 output/
+src/static/*.png
+!src/static/.gitkeep

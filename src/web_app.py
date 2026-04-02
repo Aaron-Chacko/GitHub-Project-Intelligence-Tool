@@ -25,16 +25,32 @@ def home():
         show_contributors(owner, repo, headers)
         show_languages(owner, repo, headers)
 
-        return f"<h2>Analysis complete for {owner}/{repo}</h2>"
+        return f'''
+    <h2>Results for {owner}/{repo}</h2>
+    <img src="/static/commit.png"><br><br>
+    <img src="/static/contributors.png"><br><br>
+    <img src="/static/languages.png">
+'''
 
     return '''
-        <h2>GitHub Project Intelligence Tool</h2>
-        <form method="post">
-            Owner: <input name="owner"><br><br>
-            Repo: <input name="repo"><br><br>
-            <button type="submit">Analyze</button>
-        </form>
-    '''
+    <h2>GitHub Project Intelligence Tool</h2>
+    <form method="post" onsubmit="showLoading()">
+        Owner: <input name="owner"><br><br>
+        Repo: <input name="repo"><br><br>
+        <button type="submit">Analyze</button>
+    </form>
+
+    <p id="loading" style="display:none; color:blue;">
+        Analyzing repository... please wait ⏳
+        Larger repositories can take longer times...
+    </p>
+
+    <script>
+        function showLoading() {
+            document.getElementById("loading").style.display = "block";
+        }
+    </script>
+'''
 
 if __name__ == "__main__":
     app.run(debug=True)
