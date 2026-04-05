@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 
 import requests
 import matplotlib.pyplot as plt
@@ -60,3 +60,4 @@ def show_commit_activity(owner, repo, headers):
     plt.tight_layout()
 
     plt.savefig("src/static/commit.png")
+    plt.close()

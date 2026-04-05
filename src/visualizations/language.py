@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 
 import mplcursors
 import requests
@@ -57,3 +57,4 @@ def show_languages(owner, repo, headers):
 
     plt.tight_layout()
     plt.savefig("src/static/languages.png")
+    plt.close()
