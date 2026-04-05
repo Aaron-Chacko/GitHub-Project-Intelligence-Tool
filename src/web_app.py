@@ -25,86 +25,131 @@ def home():
         show_languages(owner, repo, headers)
 
         return f'''
-        <style>
-            body {{
-                font-family: Arial;
-                background: #f4f6f8;
-                text-align: center;
-            }}
+<style>
+    body {{
+        font-family: 'Segoe UI', Arial;
+        background: #f4f6f8;
+        text-align: center;
+        padding: 20px;
+    }}
 
-            img {{
-                width: 500px;
-                margin: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            }}
-        </style>
+    h2 {{
+        margin-bottom: 20px;
+    }}
 
-        <h2>Results for {owner}/{repo}</h2>
+    .grid {{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }}
 
-        <img src="/static/commit.png"><br>
-        <img src="/static/contributors.png"><br>
-        <img src="/static/languages.png">
-        '''
+    .card {{
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }}
 
-    return '''
-    <style>
-        body {
-            font-family: Arial;
-            background: #f4f6f8;
-            text-align: center;
-            padding-top: 50px;
-        }
+    img {{
+        width: 400px;
+        border-radius: 8px;
+    }}
+</style>
 
-        .container {
-            background: white;
-            padding: 30px;
-            margin: auto;
-            width: 300px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+<h2>📊 Results for {owner}/{repo}</h2>
 
-        input {
-            width: 90%;
-            padding: 8px;
-            margin: 10px 0;
-        }
-
-        button {
-            padding: 10px 20px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        button:hover {
-            background: #45a049;
-        }
-    </style>
-
-    <div class="container">
-        <h2>GitHub Project Intelligence Tool</h2>
-
-        <form method="post" onsubmit="showLoading()">
-            <input name="owner" placeholder="Owner"><br>
-            <input name="repo" placeholder="Repository"><br>
-            <button type="submit">Analyze</button>
-        </form>
-
-        <p id="loading" style="display:none; color:blue;">
-            Analyzing repository... ⏳
-        </p>
+<div class="grid">
+    <div class="card">
+        <h4>Commit Activity</h4>
+        <img src="/static/commit.png">
     </div>
 
-    <script>
-        function showLoading() {
-            document.getElementById("loading").style.display = "block";
-        }
-    </script>
-    '''
+    <div class="card">
+        <h4>Top Contributors</h4>
+        <img src="/static/contributors.png">
+    </div>
+
+    <div class="card">
+        <h4>Language Distribution</h4>
+        <img src="/static/languages.png">
+    </div>
+</div>
+'''
+
+    return '''
+<style>
+    body {
+        font-family: 'Segoe UI', Arial;
+        background: linear-gradient(to right, #667eea, #764ba2);
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        background: white;
+        padding: 40px;
+        margin: 100px auto;
+        width: 450px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background: #5a67d8;
+    }
+
+    #loading {
+        margin-top: 15px;
+        color: #333;
+    }
+</style>
+
+<div class="container">
+    <h2>GitHub Project Intelligence Tool 🚀</h2>
+
+    <form method="post" onsubmit="showLoading()">
+        <input name="owner" placeholder="Enter Owner (e.g. microsoft)">
+        <input name="repo" placeholder="Enter Repository (e.g. vscode)">
+        <button type="submit">Analyze</button>
+    </form>
+
+    <p id="loading" style="display:none;">
+        Analyzing... please wait ⏳
+        Larger repositories take longer times.
+    </p>
+</div>
+
+<script>
+    function showLoading() {
+        document.getElementById("loading").style.display = "block";
+    }
+</script>
+'''
 
 if __name__ == "__main__":
     app.run(debug=True)
