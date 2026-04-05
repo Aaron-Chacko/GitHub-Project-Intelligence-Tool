@@ -20,37 +20,91 @@ def home():
         owner = request.form["owner"]
         repo = request.form["repo"]
 
-        # Call your functions
         show_commit_activity(owner, repo, headers)
         show_contributors(owner, repo, headers)
         show_languages(owner, repo, headers)
 
         return f'''
-    <h2>Results for {owner}/{repo}</h2>
-    <img src="/static/commit.png"><br><br>
-    <img src="/static/contributors.png"><br><br>
-    <img src="/static/languages.png">
-'''
+        <style>
+            body {{
+                font-family: Arial;
+                background: #f4f6f8;
+                text-align: center;
+            }}
+
+            img {{
+                width: 500px;
+                margin: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }}
+        </style>
+
+        <h2>Results for {owner}/{repo}</h2>
+
+        <img src="/static/commit.png"><br>
+        <img src="/static/contributors.png"><br>
+        <img src="/static/languages.png">
+        '''
 
     return '''
-    <h2>GitHub Project Intelligence Tool</h2>
-    <form method="post" onsubmit="showLoading()">
-        Owner: <input name="owner"><br><br>
-        Repo: <input name="repo"><br><br>
-        <button type="submit">Analyze</button>
-    </form>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f8;
+            text-align: center;
+            padding-top: 50px;
+        }
 
-    <p id="loading" style="display:none; color:blue;">
-        Analyzing repository... please wait ⏳
-        Larger repositories can take longer times...
-    </p>
+        .container {
+            background: white;
+            padding: 30px;
+            margin: auto;
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        input {
+            width: 90%;
+            padding: 8px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+
+    <div class="container">
+        <h2>GitHub Project Intelligence Tool</h2>
+
+        <form method="post" onsubmit="showLoading()">
+            <input name="owner" placeholder="Owner"><br>
+            <input name="repo" placeholder="Repository"><br>
+            <button type="submit">Analyze</button>
+        </form>
+
+        <p id="loading" style="display:none; color:blue;">
+            Analyzing repository... ⏳
+        </p>
+    </div>
 
     <script>
         function showLoading() {
             document.getElementById("loading").style.display = "block";
         }
     </script>
-'''
+    '''
 
 if __name__ == "__main__":
     app.run(debug=True)
