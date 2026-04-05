@@ -64,7 +64,7 @@ def show_languages(owner, repo, headers):
     # ✅ ensure folder exists
     os.makedirs(static_dir, exist_ok=True)
 
-    file_path = os.path.join(static_dir, "languages.png")
+    file_path = os.path.join(BASE_DIR, "..", "static", "languages.png")
 
     plt.savefig(file_path)
     plt.close()

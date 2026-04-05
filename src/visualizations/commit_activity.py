@@ -67,7 +67,7 @@ def show_commit_activity(owner, repo, headers):
     # ✅ ensure folder exists
     os.makedirs(static_dir, exist_ok=True)
 
-    file_path = os.path.join(static_dir, "commit.png")
+    file_path = os.path.join(BASE_DIR, "..", "static", "commit.png")
 
     plt.savefig(file_path)
     plt.close()

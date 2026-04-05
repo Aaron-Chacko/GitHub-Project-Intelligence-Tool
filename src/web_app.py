@@ -5,7 +5,7 @@ from visualizations.language import show_languages
 from dotenv import load_dotenv
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 from flask import send_from_directory
 
 @app.route('/static/<path:filename>')

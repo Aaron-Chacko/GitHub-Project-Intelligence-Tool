@@ -52,7 +52,7 @@ def show_contributors(owner, repo, headers):
     # ✅ ensure folder exists
     os.makedirs(static_dir, exist_ok=True)
 
-    file_path = os.path.join(static_dir, "contributors.png")
+    file_path = os.path.join(BASE_DIR, "..", "static", "contributors.png")
 
     plt.savefig(file_path)
     plt.close()
