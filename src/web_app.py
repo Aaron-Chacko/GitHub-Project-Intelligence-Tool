@@ -25,9 +25,20 @@ def home():
         owner = request.form["owner"]
         repo = request.form["repo"]
 
+        import os
+        import time
+
         show_commit_activity(owner, repo, headers)
         show_contributors(owner, repo, headers)
         show_languages(owner, repo, headers)
+
+        # wait briefly for files to be written
+        time.sleep(1)
+
+        # debug check (IMPORTANT)
+        base_path = os.path.join("src", "static")
+
+        print("Files in static:", os.listdir(base_path))
 
         return f'''
 <style>
