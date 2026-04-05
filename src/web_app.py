@@ -36,8 +36,9 @@ def home():
         time.sleep(1)
 
         # debug check (IMPORTANT)
-        base_path = os.path.join("src", "static")
+        import os
 
+        base_path = os.path.join(os.getcwd(), "static")
         print("Files in static:", os.listdir(base_path))
 
         return f'''
