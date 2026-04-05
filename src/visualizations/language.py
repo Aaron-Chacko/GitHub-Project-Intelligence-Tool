@@ -56,5 +56,11 @@ def show_languages(owner, repo, headers):
         sel.annotation.set_text(f"{languages[index]}: {percentages[index]:.2f}%")
 
     plt.tight_layout()
-    plt.savefig("src/static/languages.png")
+    import os
+
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    static_path = os.path.join(BASE_DIR, "static", "languages.png")
+
+    plt.savefig(static_path)
+    plt.close()
     plt.close()

@@ -59,5 +59,11 @@ def show_commit_activity(owner, repo, headers):
     plt.xticks(rotation=45)
     plt.tight_layout()
 
-    plt.savefig("src/static/commit.png")
+    import os
+
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    static_path = os.path.join(BASE_DIR, "static", "commit.png")
+
+    plt.savefig(static_path)
+    plt.close()
     plt.close()

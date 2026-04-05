@@ -44,5 +44,11 @@ def show_contributors(owner, repo, headers):
     plt.title(f"Top Contributors: {owner}/{repo}", fontsize=14)
 
     plt.tight_layout()
-    plt.savefig("src/static/contributors.png")
+    import os
+
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    static_path = os.path.join(BASE_DIR, "static", "contributors.png")
+
+    plt.savefig(static_path)
+    plt.close()
     plt.close()
