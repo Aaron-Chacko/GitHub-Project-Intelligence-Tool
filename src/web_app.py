@@ -5,7 +5,12 @@ from visualizations.language import show_languages
 from dotenv import load_dotenv
 import os
 
-app = Flask(__name__, static_folder="src/static")
+app = Flask(__name__)
+from flask import send_from_directory
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('src/static', filename)
 
 load_dotenv()
 TOKEN = os.getenv("GITHUB_TOKEN")
