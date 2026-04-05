@@ -61,8 +61,8 @@ def show_commit_activity(owner, repo, headers):
 
     import os
 
-    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    static_dir = os.path.join(BASE_DIR, "static")
+    ROOT_DIR = os.getcwd()
+    static_dir = os.path.join(ROOT_DIR, "static")
 
     os.makedirs(static_dir, exist_ok=True)
 
@@ -70,3 +70,6 @@ def show_commit_activity(owner, repo, headers):
 
     plt.savefig(file_path)
     plt.close()
+
+    print("Saved at:", file_path)
+    print("Exists?", os.path.exists(file_path))
