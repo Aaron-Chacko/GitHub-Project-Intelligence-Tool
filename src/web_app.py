@@ -28,9 +28,9 @@ def home():
         import os
         import time
 
-        show_commit_activity(owner, repo, headers)
-        show_contributors(owner, repo, headers)
-        show_languages(owner, repo, headers)
+        commit_img = show_commit_activity(owner, repo, headers)
+        contributors_img = show_contributors(owner, repo, headers)
+        languages_img = show_languages(owner, repo, headers)
 
         # wait briefly for files to be written
         time.sleep(1)
@@ -79,17 +79,17 @@ def home():
 <div class="grid">
     <div class="card">
         <h4>Commit Activity</h4>
-        <img src="/static/commit.png">
+        <img src="data:image/png;base64,{commit_img}">
     </div>
 
     <div class="card">
         <h4>Top Contributors</h4>
-        <img src="/static/contributors.png">
+        <img src="data:image/png;base64,{contributors_img}">
     </div>
 
     <div class="card">
         <h4>Language Distribution</h4>
-        <img src="/static/languages.png">
+        <img src="data:image/png;base64,{languages_img}">
     </div>
 </div>
 '''
