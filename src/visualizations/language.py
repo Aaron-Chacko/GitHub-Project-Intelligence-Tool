@@ -56,17 +56,14 @@ def show_languages(owner, repo, headers):
         sel.annotation.set_text(f"{languages[index]}: {percentages[index]:.2f}%")
 
     plt.tight_layout()
-    import os
+    import io
+    import base64
 
-    ROOT_DIR = os.getcwd()
-    static_dir = os.path.join(ROOT_DIR, "static")
-
-    os.makedirs(static_dir, exist_ok=True)
-
-    file_path = os.path.join(static_dir, "languages.png")
-
-    plt.savefig(file_path)
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
     plt.close()
 
-    print("Saved at:", file_path)
-    print("Exists?", os.path.exists(file_path))
+    buf.seek(0)
+    image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+
+    return image_base64
