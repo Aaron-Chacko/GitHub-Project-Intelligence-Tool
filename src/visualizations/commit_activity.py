@@ -72,4 +72,5 @@ def show_commit_activity(owner, repo, headers):
     plt.close()
 
     print("Saved at:", file_path)
-    print("Exists?", os.path.exists(file_path))
+    print("Exists after save:", os.path.exists(file_path))
+    print("Files in static:", os.listdir(static_dir))
