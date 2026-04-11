@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 import requests
 import time
+import math
 
 app = Flask(__name__, static_folder="static")
 from flask import send_from_directory
@@ -25,7 +26,26 @@ headers = {
 # 🔢 SCORE FUNCTIONS
 # -----------------------------
 def calculate_score(followers, repos, stars):
-    return (followers * 2) + (repos * 1) + (stars * 3)
+    followers_score = math.log1p(followers)
+    repos_score = math.log1p(repos)
+    stars_score = math.log1p(stars)
+
+    score = (
+        followers_score * 30 +
+        repos_score * 20 +
+        stars_score * 50
+    )
+
+    # normalize to 100 scale
+    max_score = (
+        math.log1p(100000) * 30 +
+        math.log1p(1000) * 20 +
+        math.log1p(200000) * 50
+    )
+
+    final_score = (score / max_score) * 100
+
+    return round(final_score, 2)
 
 
 def get_github_data(username):
