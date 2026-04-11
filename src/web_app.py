@@ -70,6 +70,16 @@ def analyze_repos(username):
 
     return total_stars
 
+def get_label(score):
+    if score >= 85:
+        return "🚀 Elite Developer"
+    elif score >= 70:
+        return "🔥 Strong Contributor"
+    elif score >= 50:
+        return "⚡ Growing Developer"
+    else:
+        return "🌱 Beginner"
+
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -93,16 +103,8 @@ def home():
         total_stars = analyze_repos(owner)
 
         score = calculate_score(followers, public_repos, total_stars)
+        label= get_label(score)
         
-        def get_label(score):
-            if score >= 85:
-                return "🚀 Elite Developer"
-            elif score >= 70:
-                return "🔥 Strong Contributor"
-            elif score >= 50:
-                return "⚡ Growing Developer"
-            else:
-                return "🌱 Beginner"
 
         return f'''
 <style>
@@ -173,6 +175,7 @@ def home():
 <div class="score-card">
     <h2>🔢 GitHub Account Score</h2>
     <h1>{round(score, 2)}</h1>
+    <p>{label}</p>
     <p>Followers: {followers}</p>
     <p>Repositories: {public_repos}</p>
     <p>Total Stars: {total_stars}</p>
