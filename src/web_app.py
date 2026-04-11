@@ -4,6 +4,8 @@ from visualizations.contributors import show_contributors
 from visualizations.language import show_languages
 from dotenv import load_dotenv
 import os
+import requests
+import time
 
 app = Flask(__name__, static_folder="static")
 from flask import send_from_directory
@@ -19,27 +21,58 @@ headers = {
     "Authorization": f"token {TOKEN}"
 }
 
+# -----------------------------
+# 🔢 SCORE FUNCTIONS
+# -----------------------------
+def calculate_score(followers, repos, stars):
+    return (followers * 2) + (repos * 1) + (stars * 3)
+
+
+def get_github_data(username):
+    url = f"https://api.github.com/users/{username}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        return response.json()
+    return None
+
+
+def analyze_repos(username):
+    url = f"https://api.github.com/users/{username}/repos"
+    response = requests.get(url)
+
+    total_stars = 0
+
+    if response.status_code == 200:
+        repos = response.json()
+        for repo in repos:
+            total_stars += repo["stargazers_count"]
+
+    return total_stars
+
+
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST":
         owner = request.form["owner"]
         repo = request.form["repo"]
 
-        import os
-        import time
-
         commit_img = show_commit_activity(owner, repo, headers)
         contributors_img = show_contributors(owner, repo, headers)
         languages_img = show_languages(owner, repo, headers)
 
-        # wait briefly for files to be written
         time.sleep(1)
 
-        # debug check (IMPORTANT)
-        import os
+        # -----------------------------
+        # 🔥 SCORE CALCULATION
+        # -----------------------------
+        user_data = get_github_data(owner)
 
-        base_path = os.path.join(os.getcwd(), "static")
-        print("Files in static:", os.listdir(base_path))
+        followers = user_data["followers"] if user_data else 0
+        public_repos = user_data["public_repos"] if user_data else 0
+        total_stars = analyze_repos(owner)
+
+        score = calculate_score(followers, public_repos, total_stars)
 
         return f'''
 <style>
@@ -72,6 +105,20 @@ def home():
         width: 400px;
         border-radius: 8px;
     }}
+
+    .score-card {{
+        margin-top: 40px;
+        padding: 20px;
+        border-radius: 12px;
+        background: #111827;
+        color: white;
+        display: inline-block;
+    }}
+
+    .score-card h1 {{
+        font-size: 48px;
+        color: #22c55e;
+    }}
 </style>
 
 <h2>📊 Results for {owner}/{repo}</h2>
@@ -91,6 +138,14 @@ def home():
         <h4>Language Distribution</h4>
         <img src="data:image/png;base64,{languages_img}">
     </div>
+</div>
+
+<div class="score-card">
+    <h2>🔢 GitHub Account Score</h2>
+    <h1>{round(score, 2)}</h1>
+    <p>Followers: {followers}</p>
+    <p>Repositories: {public_repos}</p>
+    <p>Total Stars: {total_stars}</p>
 </div>
 '''
 
