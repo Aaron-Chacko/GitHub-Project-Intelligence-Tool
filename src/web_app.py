@@ -30,7 +30,7 @@ def calculate_score(followers, repos, stars):
 
 def get_github_data(username):
     url = f"https://api.github.com/users/{username}"
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         return response.json()
@@ -39,7 +39,7 @@ def get_github_data(username):
 
 def analyze_repos(username):
     url = f"https://api.github.com/users/{username}/repos"
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
 
     total_stars = 0
 
